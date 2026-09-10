@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Management Reviewer — CTPRJMGT Midterm</title>
+  <meta name="description" content="Interactive midterm reviewer for CTPRJMGT Project Management covering all 5 lessons." />
+
+  <!-- Google Fonts — Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — Light Mode (default)
+       ============================================================ */
+    :root {
+      --color-bg: #FFFFFF;
+      --color-fg: #0A0A0A;
+      --color-card: #FAFAFA;
+      --color-border: #E5E5E5;
+      --color-border-strong: #D4D4D4;
+      --color-muted: #737373;
+      --color-muted-light: #A3A3A3;
+      --color-highlight: #F5F5F5;
+      --color-tag-bg: #F0F0F0;
+
+      /* Accent colors for emphasis — subtle but memorable */
+      --color-accent: #2563EB;          /* Blue — primary accent */
+      --color-accent-soft: #DBEAFE;     /* Light blue bg */
+      --color-accent-fg: #FFFFFF;
+      --color-amber: #D97706;           /* Amber — key terms */
+      --color-amber-soft: #FEF3C7;
+      --color-emerald: #059669;         /* Green — correct / important */
+      --color-emerald-soft: #D1FAE5;
+      --color-rose: #E11D48;            /* Rose — warnings / incorrect */
+      --color-rose-soft: #FFE4E6;
+      --color-violet: #7C3AED;          /* Violet — memory aids */
+      --color-violet-soft: #EDE9FE;
+
+      /* Quiz */
+      --color-correct: #16a34a;
+      --color-correct-bg: #f0fdf4;
+      --color-incorrect: #dc2626;
+      --color-incorrect-bg: #fef2f2;
+
+      /* Typography */
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.8125rem;
+      --font-size-base: 0.9375rem;
+      --font-size-md: 1.0625rem;
+      --font-size-lg: 1.25rem;
+      --font-size-xl: 1.5rem;
+      --font-size-2xl: 2rem;
+      --font-size-3xl: 2.5rem;
+      --font-size-4xl: 3.25rem;
+
+      /* Spacing */
+      --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px;
+      --space-xl: 32px; --space-2xl: 48px; --space-3xl: 64px; --space-4xl: 96px;
+
+      /* Radius */
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
+
+      /* Misc */
+      --transition-fast: 150ms ease;
+      --transition-normal: 250ms ease;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+      --max-width: 960px;
+      --sidebar-width: 260px;
+    }
+
+    /* ============================================================
+       DARK MODE TOKENS
+       ============================================================ */
+    [data-theme="dark"] {
+      --color-bg: #0F0F0F;
+      --color-fg: #F5F5F5;
+      --color-card: #1A1A1A;
+      --color-border: #2A2A2A;
+      --color-border-strong: #3A3A3A;
+      --color-muted: #A3A3A3;
+      --color-muted-light: #6B6B6B;
+      --color-highlight: #1F1F1F;
+      --color-tag-bg: #262626;
+
+      --color-accent: #60A5FA;
+      --color-accent-soft: #1E3A5F;
+      --color-accent-fg: #0F0F0F;
+      --color-amber: #FBBF24;
+      --color-amber-soft: #422006;
+      --color-emerald: #34D399;
+      --color-emerald-soft: #064E3B;
+      --color-rose: #FB7185;
+      --color-rose-soft: #4C0519;
+      --color-violet: #A78BFA;
+      --color-violet-soft: #2E1065;
+
+      --color-correct: #4ADE80;
+      --color-correct-bg: #052E16;
+      --color-incorrect: #F87171;
+      --color-incorrect-bg: #450A0A;
+
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-family); font-size: var(--font-size-base); line-height: 1.7;
+      color: var(--color-fg); background: var(--color-bg);
+      -webkit-font-smoothing: antialiased; transition: background var(--transition-normal), color var(--transition-normal);
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -100px; left: var(--space-md);
+      background: var(--color-accent); color: white;
+      padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm);
+      font-weight: 600; z-index: 9999; transition: top var(--transition-fast);
+    }
+    .skip-link:focus { top: var(--space-md); }
+
+    /* ============================================================
+       LAYOUT
+       ============================================================ */
+    .app { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width); position: fixed; top: 0; left: 0; bottom: 0;
+      background: var(--color-bg); border-right: 1px solid var(--color-border);
+      overflow-y: auto; z-index: 100; padding: var(--space-lg) 0;
+      transition: transform var(--transition-normal), background var(--transition-normal);
+    }
+    .sidebar-header {
+      padding: 0 var(--space-lg) var(--space-lg);
+      border-bottom: 1px solid var(--color-border); margin-bottom: var(--space-md);
+    }
+    .sidebar-logo { font-size: var(--font-size-sm); font-weight: 800; letter-spacing: -0.02em; text-transform: uppercase; }
+    .sidebar-logo span {
+      display: block; font-size: var(--font-size-xs); font-weight: 400;
+      letter-spacing: 0.04em; color: var(--color-muted); margin-top: 2px; text-transform: none;
+    }
+    .sidebar nav { padding: 0 var(--space-sm); }
+    .nav-section-label {
+      font-size: var(--font-size-xs); font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--color-muted-light);
+      padding: var(--space-md) var(--space-md) var(--space-xs);
+    }
+    .nav-btn {
+      display: flex; align-items: center; gap: var(--space-sm); width: 100%;
+      padding: var(--space-sm) var(--space-md); border: none; background: none;
+      font-family: var(--font-family); font-size: var(--font-size-sm); font-weight: 400;
+      color: var(--color-muted); text-align: left; border-radius: var(--radius-sm);
+      cursor: pointer; transition: all var(--transition-fast); line-height: 1.4;
+    }
+    .nav-btn:hover { background: var(--color-highlight); color: var(--color-fg); }
+    .nav-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+    .nav-btn.active { background: var(--color-fg); color: var(--color-bg); font-weight: 600; }
+    .nav-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 50%; font-size: 11px;
+      font-weight: 700; flex-shrink: 0; background: var(--color-tag-bg); color: var(--color-muted);
+    }
+    .nav-btn.active .nav-num { background: rgba(255,255,255,0.2); color: var(--color-bg); }
+    [data-theme="dark"] .nav-btn.active .nav-num { color: var(--color-fg); }
+
+    /* Dark mode toggle in sidebar */
+    .theme-toggle-wrap {
+      padding: var(--space-md) var(--space-lg); border-top: 1px solid var(--color-border); margin-top: var(--space-md);
+    }
+    .theme-toggle {
+      display: flex; align-items: center; justify-content: space-between; width: 100%;
+      padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border);
+      background: var(--color-card); border-radius: var(--radius-md);
+      font-family: var(--font-family); font-size: var(--font-size-sm); font-weight: 500;
+      color: var(--color-fg); cursor: pointer; transition: all var(--transition-fast);
+    }
+    .theme-toggle:hover { border-color: var(--color-accent); }
+    .theme-toggle:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+    .theme-icon { font-size: 18px; }
+
+    /* Main */
+    .main { flex: 1; margin-left: var(--sidebar-width); min-height: 100vh; }
+
+    /* Mobile toggle */
+    .mobile-toggle {
+      display: none; position: fixed; top: var(--space-md); left: var(--space-md);
+      z-index: 200; background: var(--color-fg); color: var(--color-bg);
+      border: none; width: 44px; height: 44px; border-radius: var(--radius-sm);
+      font-size: 20px; cursor: pointer; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-md);
+    }
+    .mobile-toggle:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+    /* Mobile dark mode toggle (top-right) */
+    .mobile-theme-toggle {
+      display: none; position: fixed; top: var(--space-md); right: var(--space-md);
+      z-index: 200; background: var(--color-fg); color: var(--color-bg);
+      border: none; width: 44px; height: 44px; border-radius: var(--radius-sm);
+      font-size: 18px; cursor: pointer; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-md);
+    }
+    .mobile-theme-toggle:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50; }
+
+    /* Sections */
+    .section {
+      display: none; padding: var(--space-3xl) var(--space-2xl);
+      max-width: var(--max-width); margin: 0 auto; animation: fadeIn 0.35s ease;
+    }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    .hero { text-align: center; padding: var(--space-4xl) var(--space-lg); }
+    .hero-overline {
+      font-size: var(--font-size-xs); font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--color-accent); margin-bottom: var(--space-md);
+    }
+    .hero h1 { font-size: var(--font-size-4xl); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: var(--space-lg); }
+    .hero p { font-size: var(--font-size-md); color: var(--color-muted); max-width: 560px; margin: 0 auto var(--space-xl); line-height: 1.7; }
+    .hero-stats { display: flex; justify-content: center; gap: var(--space-xl); margin-top: var(--space-2xl); flex-wrap: wrap; }
+    .hero-stat { text-align: center; }
+    .stat-num { font-size: var(--font-size-2xl); font-weight: 800; letter-spacing: -0.02em; color: var(--color-accent); }
+    .stat-label { font-size: var(--font-size-xs); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: var(--space-sm);
+      padding: 14px 32px; background: var(--color-accent); color: white;
+      font-family: var(--font-family); font-size: var(--font-size-sm); font-weight: 600;
+      border: none; border-radius: var(--radius-md); cursor: pointer; transition: all var(--transition-fast);
+    }
+    .hero-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+    .hero-cta:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+    /* ============================================================
+       SECTION TYPOGRAPHY
+       ============================================================ */
+    .section-overline {
+      font-size: var(--font-size-xs); font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: var(--space-sm);
+    }
+    .section h2 { font-size: var(--font-size-3xl); font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: var(--space-sm); }
+    .section-lead { font-size: var(--font-size-md); color: var(--color-muted); margin-bottom: var(--space-2xl); line-height: 1.7; max-width: 680px; }
+    .section h3 { font-size: var(--font-size-xl); font-weight: 700; letter-spacing: -0.015em; margin: var(--space-2xl) 0 var(--space-md); }
+    .section h4 { font-size: var(--font-size-lg); font-weight: 600; margin: var(--space-xl) 0 var(--space-sm); }
+    .section p { margin-bottom: var(--space-md); }
+
+    /* ============================================================
+       HIGHLIGHT MARKS — colored inline highlights for important terms
+       ============================================================ */
+    .hi-blue { color: var(--color-accent); font-weight: 600; }
+    .hi-amber { background: var(--color-amber-soft); color: var(--color-amber); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+    .hi-green { background: var(--color-emerald-soft); color: var(--color-emerald); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+    .hi-rose { background: var(--color-rose-soft); color: var(--color-rose); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+    .hi-violet { background: var(--color-violet-soft); color: var(--color-violet); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+
+    /* ============================================================
+       CARDS
+       ============================================================ */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-md); margin: var(--space-lg) 0; }
+    .card {
+      background: var(--color-card); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: var(--space-lg); transition: all var(--transition-fast);
+    }
+    .card:hover { border-color: var(--color-border-strong); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .card-icon {
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      background: var(--color-accent); color: white; border-radius: var(--radius-sm);
+      font-size: 16px; font-weight: 700; margin-bottom: var(--space-md);
+    }
+    .card h4 { font-size: var(--font-size-base); font-weight: 700; margin: 0 0 var(--space-xs); }
+    .card p { font-size: var(--font-size-sm); color: var(--color-muted); line-height: 1.6; margin: 0; }
+
+    /* ============================================================
+       DIAGRAMS
+       ============================================================ */
+    .diagram-container {
+      margin: var(--space-xl) 0; padding: var(--space-xl);
+      background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+    }
+    .diagram-container svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+    .diagram-label { font-size: var(--font-size-xs); text-align: center; color: var(--color-muted); margin-top: var(--space-md); font-weight: 500; }
+
+    /* ============================================================
+       TABLES
+       ============================================================ */
+    .table-wrap { margin: var(--space-lg) 0; overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-lg); }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: var(--font-size-sm); }
+    .table-wrap th {
+      background: var(--color-fg); color: var(--color-bg); font-weight: 600; text-align: left;
+      padding: var(--space-md) var(--space-lg); font-size: var(--font-size-xs);
+      text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+    }
+    .table-wrap td { padding: var(--space-md) var(--space-lg); border-bottom: 1px solid var(--color-border); vertical-align: top; line-height: 1.5; }
+    .table-wrap tr:last-child td { border-bottom: none; }
+    .table-wrap tr:hover td { background: var(--color-highlight); }
+
+    /* ============================================================
+       DEFINITION LIST
+       ============================================================ */
+    .def-list { margin: var(--space-lg) 0; }
+    .def-item { display: flex; gap: var(--space-lg); padding: var(--space-md) 0; border-bottom: 1px solid var(--color-border); }
+    .def-item:last-child { border-bottom: none; }
+    .def-term { font-weight: 700; font-size: var(--font-size-sm); min-width: 150px; flex-shrink: 0; color: var(--color-accent); }
+    .def-desc { font-size: var(--font-size-sm); color: var(--color-muted); line-height: 1.6; }
+
+    /* ============================================================
+       CALLOUT
+       ============================================================ */
+    .callout {
+      margin: var(--space-lg) 0; padding: var(--space-lg);
+      background: var(--color-card); border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent); border-radius: var(--radius-md);
+    }
+    .callout.callout-amber { border-left-color: var(--color-amber); }
+    .callout.callout-green { border-left-color: var(--color-emerald); }
+    .callout.callout-violet { border-left-color: var(--color-violet); }
+    .callout.callout-rose { border-left-color: var(--color-rose); }
+    .callout-title { font-size: var(--font-size-sm); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-xs); }
+    .callout-title.blue { color: var(--color-accent); }
+    .callout-title.amber { color: var(--color-amber); }
+    .callout-title.green { color: var(--color-emerald); }
+    .callout-title.violet { color: var(--color-violet); }
+    .callout p { font-size: var(--font-size-sm); color: var(--color-muted); margin: 0; line-height: 1.7; }
+
+    /* ============================================================
+       LISTS
+       ============================================================ */
+    .styled-list { list-style: none; margin: var(--space-md) 0; }
+    .styled-list li { position: relative; padding: var(--space-sm) 0 var(--space-sm) var(--space-lg); font-size: var(--font-size-sm); line-height: 1.6; }
+    .styled-list li::before { content: ''; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; background: var(--color-accent); border-radius: 50%; }
+
+    .num-list { list-style: none; counter-reset: numlist; margin: var(--space-md) 0; }
+    .num-list li { counter-increment: numlist; position: relative; padding: var(--space-sm) 0 var(--space-sm) 36px; font-size: var(--font-size-sm); line-height: 1.6; }
+    .num-list li::before {
+      content: counter(numlist); position: absolute; left: 0; top: 10px;
+      width: 22px; height: 22px; background: var(--color-fg); color: var(--color-bg);
+      border-radius: 50%; font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: var(--space-2xl) 0; }
+
+    /* ============================================================
+       FLOW DIAGRAM
+       ============================================================ */
+    .flow { display: flex; align-items: center; justify-content: center; gap: 0; margin: var(--space-xl) 0; flex-wrap: wrap; }
+    .flow-step {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: var(--space-md) var(--space-lg); background: var(--color-fg); color: var(--color-bg);
+      border-radius: var(--radius-md); min-width: 110px;
+    }
+    .flow-step .step-num { font-size: var(--font-size-xs); font-weight: 700; opacity: 0.6; margin-bottom: 2px; }
+    .flow-step .step-name { font-size: var(--font-size-sm); font-weight: 700; }
+    .flow-arrow { font-size: 20px; color: var(--color-accent); padding: 0 var(--space-xs); flex-shrink: 0; }
+
+    /* ============================================================
+       QUIZ
+       ============================================================ */
+    .quiz-progress { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl); font-size: var(--font-size-sm); color: var(--color-muted); }
+    .quiz-progress-bar { flex: 1; height: 4px; background: var(--color-border); border-radius: 100px; overflow: hidden; }
+    .quiz-progress-fill { height: 100%; background: var(--color-accent); border-radius: 100px; transition: width var(--transition-normal); }
+
+    .quiz-question-card { background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-xl); margin-bottom: var(--space-lg); }
+    .quiz-q-num { font-size: var(--font-size-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent); margin-bottom: var(--space-sm); }
+    .quiz-q-text { font-size: var(--font-size-lg); font-weight: 600; margin-bottom: var(--space-lg); line-height: 1.5; }
+    .quiz-options { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+    .quiz-option {
+      display: flex; align-items: center; gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg); background: var(--color-bg);
+      border: 1.5px solid var(--color-border); border-radius: var(--radius-md);
+      font-family: var(--font-family); font-size: var(--font-size-sm);
+      cursor: pointer; transition: all var(--transition-fast); text-align: left; line-height: 1.5;
+      color: var(--color-fg);
+    }
+    .quiz-option:hover:not(:disabled) { border-color: var(--color-accent); background: var(--color-highlight); }
+    .quiz-option:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+    .opt-letter {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--color-border-strong);
+      font-weight: 700; font-size: var(--font-size-xs); flex-shrink: 0; transition: all var(--transition-fast);
+    }
+    .quiz-option:hover:not(:disabled) .opt-letter { border-color: var(--color-accent); background: var(--color-accent); color: white; }
+    .quiz-option.correct { border-color: var(--color-correct); background: var(--color-correct-bg); }
+    .quiz-option.correct .opt-letter { border-color: var(--color-correct); background: var(--color-correct); color: white; }
+    .quiz-option.incorrect { border-color: var(--color-incorrect); background: var(--color-incorrect-bg); }
+    .quiz-option.incorrect .opt-letter { border-color: var(--color-incorrect); background: var(--color-incorrect); color: white; }
+    .quiz-option:disabled { cursor: default; }
+
+    .quiz-explanation { margin-top: var(--space-md); padding: var(--space-md) var(--space-lg); background: var(--color-accent-soft); border-left: 3px solid var(--color-accent); border-radius: var(--radius-md); font-size: var(--font-size-sm); color: var(--color-fg); line-height: 1.6; display: none; }
+    .quiz-explanation.show { display: block; }
+
+    .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-lg); }
+    .btn {
+      display: inline-flex; align-items: center; gap: var(--space-sm);
+      padding: 10px 24px; background: var(--color-accent); color: white;
+      font-family: var(--font-family); font-size: var(--font-size-sm); font-weight: 600;
+      border: 1.5px solid var(--color-accent); border-radius: var(--radius-md);
+      cursor: pointer; transition: all var(--transition-fast);
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+    .btn-outline { background: transparent; color: var(--color-fg); border-color: var(--color-border-strong); }
+    .btn-outline:hover { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); opacity: 1; }
+    .btn:disabled { opacity: 0.3; cursor: default; }
+
+    .quiz-score { text-align: center; padding: var(--space-3xl) var(--space-lg); }
+    .quiz-score .score-num { font-size: 72px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: var(--color-accent); }
+    .quiz-score .score-label { font-size: var(--font-size-md); color: var(--color-muted); margin-top: var(--space-sm); }
+    .quiz-score .score-msg { font-size: var(--font-size-lg); font-weight: 600; margin-top: var(--space-xl); }
+
+    /* ============================================================
+       RESPONSIVE — Phone-first optimizations
+       ============================================================ */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); width: 280px; z-index: 150; }
+      .sidebar.open { transform: translateX(0); }
+      .overlay.show { display: block; }
+      .mobile-toggle, .mobile-theme-toggle { display: flex; }
+      .main { margin-left: 0; }
+      .section { padding: 80px var(--space-md) var(--space-2xl); }
+      .hero { padding: var(--space-xl) var(--space-sm); }
+      .hero h1 { font-size: var(--font-size-2xl); }
+      .hero p { font-size: var(--font-size-sm); }
+      .section h2 { font-size: var(--font-size-xl); }
+      .section h3 { font-size: var(--font-size-lg); }
+      .hero-stats { gap: var(--space-lg); }
+      .card-grid { grid-template-columns: 1fr; }
+      .def-item { flex-direction: column; gap: var(--space-xs); }
+      .def-term { min-width: unset; }
+      .flow { flex-direction: column; gap: var(--space-sm); }
+      .flow-arrow { transform: rotate(90deg); }
+      .flow-step { min-width: 160px; }
+      .quiz-q-text { font-size: var(--font-size-base); }
+      .quiz-option { padding: var(--space-md); gap: var(--space-sm); }
+      .table-wrap { font-size: var(--font-size-xs); }
+      .table-wrap th, .table-wrap td { padding: var(--space-sm) var(--space-md); }
+    }
+
+    @media (max-width: 380px) {
+      :root { --font-size-base: 0.875rem; --font-size-4xl: 2rem; --font-size-3xl: 1.75rem; }
+      .section { padding: 72px var(--space-sm) var(--space-xl); }
+      .hero-stats { flex-direction: column; gap: var(--space-md); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <div class="app">
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Open navigation menu">&#9776;</button>
+    <button class="mobile-theme-toggle" id="mobileThemeToggle" aria-label="Toggle dark mode">&#9790;</button>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">CTPRJMGT<span>Midterm Reviewer</span></div>
+      </div>
+      <nav>
+        <div class="nav-section-label">Overview</div>
+        <button class="nav-btn active" data-target="home"><span class="nav-num" aria-hidden="true">&#8962;</span> Home</button>
+        <div class="nav-section-label">Lessons</div>
+        <button class="nav-btn" data-target="lesson1"><span class="nav-num" aria-hidden="true">1</span> Introduction to PM</button>
+        <button class="nav-btn" data-target="lesson2"><span class="nav-num" aria-hidden="true">2</span> PM &amp; IT Context</button>
+        <button class="nav-btn" data-target="lesson3"><span class="nav-num" aria-hidden="true">3</span> Process Groups</button>
+        <button class="nav-btn" data-target="lesson4"><span class="nav-num" aria-hidden="true">4</span> Integration Mgmt</button>
+        <button class="nav-btn" data-target="lesson5"><span class="nav-num" aria-hidden="true">5</span> PM Methodologies</button>
+        <div class="nav-section-label">Practice</div>
+        <button class="nav-btn" data-target="quiz"><span class="nav-num" aria-hidden="true">&#9998;</span> Quiz (35 Items)</button>
+      </nav>
+      <div class="theme-toggle-wrap">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <span>Dark Mode</span>
+          <span class="theme-icon" id="themeIcon">&#9790;</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main" id="main-content">
+
+      <!-- HOME -->
+      <section class="section active" id="home">
+        <div class="hero">
+          <p class="hero-overline">CTPRJMGT &mdash; Midterm Examination</p>
+          <h1>Project Management<br/>Reviewer</h1>
+          <p>A comprehensive study companion covering all five lessons for your midterm. Browse each lesson, study the key concepts, and test yourself with the 35-item practice quiz.</p>
+          <button class="hero-cta" onclick="navigateTo('lesson1')">Start Reviewing &rarr;</button>
+          <div class="hero-stats">
+            <div class="hero-stat"><div class="stat-num">5</div><div class="stat-label">Lessons</div></div>
+            <div class="hero-stat"><div class="stat-num">10</div><div class="stat-label">Knowledge Areas</div></div>
+            <div class="hero-stat"><div class="stat-num">35</div><div class="stat-label">Quiz Items</div></div>
+            <div class="hero-stat"><div class="stat-num">9</div><div class="stat-label">SDLC Models</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSON 1 -->
+      <section class="section" id="lesson1">
+        <p class="section-overline">Lesson 1</p>
+        <h2>Introduction to Project Management</h2>
+        <p class="section-lead">Understanding what projects are, how they differ from operations, and the foundational framework of project management.</p>
+
+        <h3>What Is a Project?</h3>
+        <div class="callout">
+          <div class="callout-title blue">Key Definition</div>
+          <p>A <span class="hi-blue">project</span> is a <span class="hi-amber">temporary endeavor</span> undertaken to create a <span class="hi-amber">unique product, service, or result</span>. Unlike <span class="hi-rose">operations</span> (ongoing work that sustains the business), projects end when their objectives are reached or terminated.</p>
+        </div>
+
+        <h4>Seven Project Attributes</h4>
+        <ol class="num-list">
+          <li><span class="hi-blue">Unique purpose</span> &mdash; every project has a distinct goal</li>
+          <li><span class="hi-blue">Temporary</span> &mdash; has a defined start and end</li>
+          <li><span class="hi-blue">Drives change</span> and enables value creation</li>
+          <li><span class="hi-blue">Progressive elaboration</span> &mdash; details are refined over time</li>
+          <li><span class="hi-blue">Requires resources</span> &mdash; often from various areas</li>
+          <li><span class="hi-blue">Primary customer or sponsor</span></li>
+          <li><span class="hi-blue">Involves uncertainty</span></li>
+        </ol>
+
+        <h3>Project Constraints</h3>
+        <div class="diagram-container">
+          <svg viewBox="0 0 400 320" width="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triple Constraint Triangle">
+            <polygon points="200,40 60,280 340,280" fill="none" stroke="currentColor" stroke-width="2.5"/>
+            <text x="200" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="700" fill="#2563EB">SCOPE</text>
+            <text x="40" y="305" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="700" fill="#D97706">TIME</text>
+            <text x="360" y="305" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="700" fill="#059669">COST</text>
+            <circle cx="200" cy="190" r="35" fill="none" stroke="#A78BFA" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <text x="200" y="195" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#7C3AED">QUALITY</text>
+          </svg>
+          <p class="diagram-label">Fig 1 &mdash; The Triple Constraint with Quality at the center</p>
+        </div>
+        <div class="callout callout-violet">
+          <div class="callout-title violet">Remember This</div>
+          <p><span class="hi-violet">Quadruple constraint</span> = Scope + Time + Cost + <span class="hi-violet">Quality</span>. A project may meet the first three but still fail if quality or sponsor satisfaction isn&rsquo;t met.</p>
+        </div>
+
+        <h3>What Is Project Management?</h3>
+        <p>Project management is <em>&ldquo;the application of <span class="hi-blue">knowledge, skills, tools, and techniques</span> to project activities to meet project requirements.&rdquo;</em></p>
+
+        <h3>Project Stakeholders</h3>
+        <p>People <span class="hi-amber">involved in or affected by</span> project activities:</p>
+        <ul class="styled-list">
+          <li>Project sponsor</li>
+          <li>Project team</li>
+          <li>Support staff</li>
+          <li>Customers &amp; users</li>
+          <li>Suppliers</li>
+          <li>Opponents of the project</li>
+        </ul>
+
+        <h3>10 Knowledge Areas</h3>
+        <div class="card-grid">
+          <div class="card"><div class="card-icon">1</div><h4>Scope Management</h4><p>Defining and managing all work required to complete the project.</p></div>
+          <div class="card"><div class="card-icon">2</div><h4>Schedule Management</h4><p>Estimating duration, developing schedules, ensuring timely completion.</p></div>
+          <div class="card"><div class="card-icon">3</div><h4>Cost Management</h4><p>Preparing and managing the project budget.</p></div>
+          <div class="card"><div class="card-icon">4</div><h4>Quality Management</h4><p>Ensuring the project satisfies stated or implied needs.</p></div>
+          <div class="card"><div class="card-icon">5</div><h4>Resource Management</h4><p>Making effective use of people and physical resources.</p></div>
+          <div class="card"><div class="card-icon">6</div><h4>Communications Mgmt</h4><p>Generating, collecting, disseminating, and storing project information.</p></div>
+          <div class="card"><div class="card-icon">7</div><h4>Risk Management</h4><p>Identifying, analyzing, and responding to project risks.</p></div>
+          <div class="card"><div class="card-icon">8</div><h4>Procurement Mgmt</h4><p>Acquiring goods and services from outside the organization.</p></div>
+          <div class="card"><div class="card-icon">9</div><h4>Stakeholder Mgmt</h4><p>Identifying, analyzing, and managing stakeholder engagement.</p></div>
+          <div class="card"><div class="card-icon">10</div><h4>Integration Mgmt</h4><p>An overarching function that coordinates all other knowledge areas.</p></div>
+        </div>
+
+        <h3>Project Success Factors</h3>
+        <ol class="num-list">
+          <li>Met <span class="hi-green">scope, time, and cost goals</span></li>
+          <li>Satisfied the <span class="hi-green">customer/sponsor</span></li>
+          <li>Achieved its main objective (e.g., ROI, making sponsors happy)</li>
+        </ol>
+        <div class="callout callout-green">
+          <div class="callout-title green">Top 3 Success Factors</div>
+          <p><span class="hi-green">Adequate funding</span>, <span class="hi-green">staff expertise</span>, and <span class="hi-green">engagement from all stakeholders</span>.</p>
+        </div>
+
+        <hr class="divider"/>
+        <h3>Programs, Portfolios &amp; Organizational PM</h3>
+        <div class="def-list">
+          <div class="def-item"><span class="def-term">Program</span><span class="def-desc">A group of related projects managed together to obtain benefits not available individually.</span></div>
+          <div class="def-item"><span class="def-term">Portfolio</span><span class="def-desc">A collection of projects/programs managed as investments to achieve strategic objectives.</span></div>
+          <div class="def-item"><span class="def-term">Organizational PM</span><span class="def-desc">Integrates portfolio, program, and project management with organizational enablers.</span></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Aspect</th><th>Projects</th><th>Programs</th><th>Portfolios</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Nature</strong></td><td>Temporary, unique result</td><td>Group of related projects</td><td>Collection aligned to strategy</td></tr>
+              <tr><td><strong>Managed by</strong></td><td>Project manager</td><td>Program manager</td><td>Portfolio manager</td></tr>
+              <tr><td><strong>Success</strong></td><td>Quality, timeliness, budget, satisfaction</td><td>Ability to deliver intended benefits</td><td>Aggregate investment performance</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="divider"/>
+        <h3>PMI &amp; Certification</h3>
+        <p>The <span class="hi-blue">Project Management Institute (PMI)</span> is an international society founded in <span class="hi-amber">1969</span> with 500,000+ members. PMI provides <span class="hi-amber">PMP certification</span> (Project Management Professional).</p>
+        <h4>Ethics in PM</h4>
+        <ul class="styled-list">
+          <li><strong>Decision-making:</strong> Transparency and consideration of other parties</li>
+          <li><strong>Proficiency:</strong> Only accept assignments matching your skill set</li>
+          <li><strong>Relationships:</strong> Build productive, positive relationships</li>
+          <li><strong>Honesty &amp; integrity:</strong> Objectivity and truth</li>
+        </ul>
+      </section>
+
+      <!-- LESSON 2 -->
+      <section class="section" id="lesson2">
+        <p class="section-overline">Lesson 2</p>
+        <h2>The PM &amp; IT Context</h2>
+        <p class="section-lead">Systems thinking, organizational structures, stakeholders, life cycles, and modern trends.</p>
+
+        <h3>A Systems View of PM</h3>
+        <div class="callout">
+          <div class="callout-title blue">Systems Approach</div>
+          <p>A holistic and analytical approach using <span class="hi-blue">systems philosophy</span>, <span class="hi-blue">systems analysis</span>, and <span class="hi-blue">systems management</span>.</p>
+        </div>
+        <div class="diagram-container">
+          <svg viewBox="0 0 440 280" width="440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three-Sphere Model">
+            <circle cx="160" cy="150" r="90" fill="none" stroke="#D97706" stroke-width="2"/>
+            <circle cx="280" cy="150" r="90" fill="none" stroke="#059669" stroke-width="2"/>
+            <circle cx="220" cy="80" r="90" fill="none" stroke="#2563EB" stroke-width="2"/>
+            <text x="120" y="200" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#D97706">Business</text>
+            <text x="320" y="200" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#059669">Technology</text>
+            <text x="220" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#2563EB">Organization</text>
+          </svg>
+          <p class="diagram-label">Fig 2 &mdash; Three-Sphere Model for Systems Management</p>
+        </div>
+
+        <h3>Four Frames of Organizations</h3>
+        <div class="card-grid">
+          <div class="card"><div class="card-icon">S</div><h4>Structural Frame</h4><p>Roles, responsibilities, coordination, and control. Very rational.</p></div>
+          <div class="card"><div class="card-icon">H</div><h4>Human Resources Frame</h4><p>Harmony between organizational and people&rsquo;s needs.</p></div>
+          <div class="card"><div class="card-icon">P</div><h4>Political Frame</h4><p>Competition for <span class="hi-rose">power, resources, and leadership</span>.</p></div>
+          <div class="card"><div class="card-icon">Sy</div><h4>Symbolic Frame</h4><p>Focuses on <span class="hi-violet">symbols and meanings</span>.</p></div>
+        </div>
+
+        <h3>Organizational Structures</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Structure</th><th>Description</th><th>Key Feature</th></tr></thead>
+            <tbody>
+              <tr><td><span class="hi-blue">Functional</span></td><td>Specialized departments reporting to CEO</td><td>Specialized skills per discipline</td></tr>
+              <tr><td><span class="hi-blue">Project</span></td><td>Program managers report to CEO</td><td>Organized around projects</td></tr>
+              <tr><td><span class="hi-amber">Matrix</span></td><td>Middle ground &mdash; dual reporting</td><td>Report to both functional &amp; project managers</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Organizational Culture (10 Characteristics)</h3>
+        <div class="card-grid">
+          <div class="card"><h4>Member Identity</h4><p>Identify with the org as a whole</p></div>
+          <div class="card"><h4>Group Emphasis</h4><p>Work organized around groups/teams</p></div>
+          <div class="card"><h4>People Focus</h4><p>Decisions consider effects on people</p></div>
+          <div class="card"><h4>Unit Integration</h4><p>Departments encouraged to coordinate</p></div>
+          <div class="card"><h4>Control</h4><p>Rules, policies, direct supervision</p></div>
+          <div class="card"><h4>Risk Tolerance</h4><p>Encouragement to be innovative</p></div>
+          <div class="card"><h4>Reward Criteria</h4><p>Performance-based vs. seniority</p></div>
+          <div class="card"><h4>Conflict Tolerance</h4><p>Air conflicts and criticism openly</p></div>
+          <div class="card"><h4>Means-Ends Orientation</h4><p>Outcomes vs. processes</p></div>
+          <div class="card"><h4>Open-Systems Focus</h4><p>Respond to external changes</p></div>
+        </div>
+
+        <hr class="divider"/>
+        <h3>Top Management Commitment</h3>
+        <ol class="num-list">
+          <li><span class="hi-green">Adequate resources</span></li>
+          <li><span class="hi-green">Timely approval</span> for unique project needs</li>
+          <li><span class="hi-green">Cooperation</span> from other parts of the organization</li>
+          <li><span class="hi-green">Senior guidance</span> and mentoring</li>
+        </ol>
+
+        <h3>Project Life Cycle (4 Phases)</h3>
+        <div class="flow">
+          <div class="flow-step"><span class="step-num">1</span><span class="step-name">Starting</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-num">2</span><span class="step-name">Organizing</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-num">3</span><span class="step-name">Carrying Out</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-num">4</span><span class="step-name">Finishing</span></div>
+        </div>
+
+        <h4>Product Life-Cycle Types</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Type</th><th>Description</th><th>AKA</th></tr></thead>
+            <tbody>
+              <tr><td><span class="hi-blue">Predictive</span></td><td>Scope, schedule, cost determined early</td><td><span class="hi-amber">Waterfall</span></td></tr>
+              <tr><td><span class="hi-blue">Iterative</span></td><td>Scope early; time/cost modified as understanding grows</td><td>&mdash;</td></tr>
+              <tr><td><span class="hi-blue">Incremental</span></td><td>Deliverables add functionality through iterations</td><td>&mdash;</td></tr>
+              <tr><td><span class="hi-blue">Adaptive</span></td><td>Detailed scope per iteration; useable product each cycle</td><td><span class="hi-amber">Agile</span></td></tr>
+              <tr><td><span class="hi-blue">Hybrid</span></td><td>Combination of approaches</td><td>&mdash;</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="divider"/>
+        <h3>Agile &amp; Scrum</h3>
+        <div class="callout callout-violet">
+          <div class="callout-title violet">Agile Manifesto &mdash; Memorize These!</div>
+          <p>1. <span class="hi-violet">Individuals and interactions</span> over processes and tools<br/>
+          2. <span class="hi-violet">Working software</span> over comprehensive documentation<br/>
+          3. <span class="hi-violet">Customer collaboration</span> over contract negotiation<br/>
+          4. <span class="hi-violet">Responding to change</span> over following a plan</p>
+        </div>
+        <h4>Scrum Framework</h4>
+        <div class="def-list">
+          <div class="def-item"><span class="def-term">Product Owner</span><span class="def-desc">Creates the <span class="hi-amber">product backlog</span> (prioritized wish list).</span></div>
+          <div class="def-item"><span class="def-term">Sprint Planning</span><span class="def-desc">Team pulls items into a <span class="hi-amber">sprint backlog</span>.</span></div>
+          <div class="def-item"><span class="def-term">Sprint</span><span class="def-desc">Time-boxed cycle, usually <span class="hi-amber">2&ndash;4 weeks</span>.</span></div>
+          <div class="def-item"><span class="def-term">Daily Scrum</span><span class="def-desc">Daily meeting to assess progress.</span></div>
+          <div class="def-item"><span class="def-term">ScrumMaster</span><span class="def-desc">Keeps the team focused on its goal.</span></div>
+          <div class="def-item"><span class="def-term">Sprint Review</span><span class="def-desc">End-of-sprint review and retrospective.</span></div>
+        </div>
+
+        <hr class="divider"/>
+        <h3>Recent Trends</h3>
+        <div class="card-grid">
+          <div class="card"><h4>Globalization</h4><p>Communications, trust, common practices, tools across borders.</p></div>
+          <div class="card"><h4>Outsourcing</h4><p>Cost reduction; can be domestically unpopular.</p></div>
+          <div class="card"><h4>Virtual Teams</h4><p>Lower costs, more expertise, work-life balance. Risks: isolation, communication challenges.</p></div>
+        </div>
+      </section>
+
+      <!-- LESSON 3 -->
+      <section class="section" id="lesson3">
+        <p class="section-overline">Lesson 3</p>
+        <h2>The PM Process Groups</h2>
+        <p class="section-lead">The five fundamental process groups that every project moves through.</p>
+
+        <div class="callout callout-violet">
+          <div class="callout-title violet">Memory Aid: I-P-E-M-C</div>
+          <p><span class="hi-violet">I</span>nitiating &rarr; <span class="hi-violet">P</span>lanning &rarr; <span class="hi-violet">E</span>xecuting &rarr; <span class="hi-violet">M</span>onitoring &amp; Controlling &rarr; <span class="hi-violet">C</span>losing</p>
+        </div>
+
+        <div class="flow">
+          <div class="flow-step"><span class="step-num">1</span><span class="step-name">Initiating</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-num">2</span><span class="step-name">Planning</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-num">3</span><span class="step-name">Executing</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-num">4</span><span class="step-name">M &amp; C</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-num">5</span><span class="step-name">Closing</span></div>
+        </div>
+
+        <div class="card-grid">
+          <div class="card"><div class="card-icon">I</div><h4>Initiating</h4><p>Defining and <span class="hi-blue">authorizing</span> a project or phase.</p></div>
+          <div class="card"><div class="card-icon">P</div><h4>Planning</h4><p>Devising a <span class="hi-blue">workable scheme</span> for the project. Includes scope, schedule, cost, procurement plans.</p></div>
+          <div class="card"><div class="card-icon">E</div><h4>Executing</h4><p>Coordinating <span class="hi-blue">people and resources</span> to create deliverables. <span class="hi-amber">Consumes most time &amp; budget.</span></p></div>
+          <div class="card"><div class="card-icon">M</div><h4>Monitoring &amp; Controlling</h4><p><span class="hi-blue">Measuring progress</span> and taking <span class="hi-rose">corrective action</span>.</p></div>
+          <div class="card"><div class="card-icon">C</div><h4>Closing</h4><p>Formalizing acceptance. <span class="hi-green">Archiving files</span>, documenting <span class="hi-green">lessons learned</span>.</p></div>
+        </div>
+
+        <hr class="divider"/>
+        <h3>Integration Mapping</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Process Group</th><th>Integration Management Processes</th></tr></thead>
+            <tbody>
+              <tr><td><span class="hi-blue">Initiating</span></td><td>Develop Project Charter</td></tr>
+              <tr><td><span class="hi-blue">Planning</span></td><td>Develop Project Management Plan</td></tr>
+              <tr><td><span class="hi-blue">Executing</span></td><td>Direct &amp; Manage Project Work; Manage Project Knowledge</td></tr>
+              <tr><td><span class="hi-blue">M &amp; C</span></td><td>Monitor &amp; Control Work; Perform Integrated Change Control</td></tr>
+              <tr><td><span class="hi-blue">Closing</span></td><td>Close Project or Phase</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>IT PM Methodologies</h3>
+        <ol class="num-list">
+          <li><span class="hi-amber">PRINCE2</span> &mdash; PRojects IN Controlled Environments</li>
+          <li><span class="hi-amber">Agile Methods</span></li>
+          <li><span class="hi-amber">RUP</span> &mdash; Rational Unified Process</li>
+          <li><span class="hi-amber">Six Sigma</span> &mdash; quality improvement</li>
+        </ol>
+      </section>
+
+      <!-- LESSON 4 -->
+      <section class="section" id="lesson4">
+        <p class="section-overline">Lesson 4</p>
+        <h2>Project Integration Management</h2>
+        <p class="section-lead">The overarching knowledge area that coordinates all other areas.</p>
+
+        <div class="callout">
+          <div class="callout-title blue">Core Concept</div>
+          <p>Integration management <span class="hi-blue">coordinates all other PM knowledge areas</span> throughout the project life cycle. Primary tools: <span class="hi-amber">communication</span> and <span class="hi-amber">relationships</span>.</p>
+        </div>
+
+        <h3>SWOT Analysis</h3>
+        <div class="card-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+          <div class="card" style="border-left:3px solid var(--color-accent);"><h4><span class="hi-blue">S</span>trengths</h4><p>Internal advantages</p></div>
+          <div class="card" style="border-left:3px solid var(--color-amber);"><h4><span class="hi-amber">W</span>eaknesses</h4><p>Internal limitations</p></div>
+          <div class="card" style="border-left:3px solid var(--color-emerald);"><h4><span class="hi-green">O</span>pportunities</h4><p>External chances</p></div>
+          <div class="card" style="border-left:3px solid var(--color-rose);"><h4><span class="hi-rose">T</span>hreats</h4><p>External risks</p></div>
+        </div>
+
+        <h4>5 Project Selection Methods</h4>
+        <ol class="num-list">
+          <li><span class="hi-blue">Broad organizational needs</span> &mdash; need, funding, will</li>
+          <li><span class="hi-blue">Categorizing IT projects</span> &mdash; problem, opportunity, or directive</li>
+          <li><span class="hi-blue">NPV</span> (Net Present Value) &mdash; positive NPV preferred</li>
+          <li><span class="hi-blue">Weighted scoring model</span></li>
+          <li><span class="hi-blue">Balanced scorecard</span></li>
+        </ol>
+
+        <h4>Financial Analysis</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Method</th><th>Formula</th><th>Rule</th></tr></thead>
+            <tbody>
+              <tr><td><span class="hi-amber">NPV</span></td><td>PV of future inflows &minus; outflows</td><td>Positive &amp; higher = better</td></tr>
+              <tr><td><span class="hi-amber">ROI</span></td><td>(Benefits &minus; Costs) &divide; Costs</td><td>Percentage; can be +/&minus;</td></tr>
+              <tr><td><span class="hi-amber">Payback Period</span></td><td>Time to recoup investment</td><td>Shorter = better</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-amber">
+          <div class="callout-title amber">Project Impetus Categories</div>
+          <p><span class="hi-amber">Problem</span> &mdash; undesirable situation preventing goals.<br/>
+          <span class="hi-amber">Opportunity</span> &mdash; chance to improve.<br/>
+          <span class="hi-amber">Directive</span> &mdash; external requirement.</p>
+        </div>
+
+        <hr class="divider"/>
+        <h3>Project Charter</h3>
+        <p>Formally initiates the project. Contains objectives, requirements, benefits, contracts, environmental factors, and organizational process info.</p>
+        <p><strong>Tools:</strong> <span class="hi-blue">Expert judgment</span>, data gathering, interpersonal/team skills, meetings.</p>
+
+        <h3>PM Plan</h3>
+        <p>Should be <span class="hi-green">dynamic, flexible, and receptive to change</span>.</p>
+        <div class="callout callout-green">
+          <div class="callout-title green">Golden Rule</div>
+          <p><span class="hi-green">&ldquo;Those who will do the work should plan the work.&rdquo;</span></p>
+        </div>
+
+        <hr class="divider"/>
+        <h3>Monitoring &amp; Controlling</h3>
+        <div class="def-list">
+          <div class="def-item"><span class="def-term">Baseline</span><span class="def-desc">A documented starting point used for <span class="hi-amber">future comparison</span>.</span></div>
+          <div class="def-item"><span class="def-term">Knowledge Mgmt</span><span class="def-desc">Key output: <span class="hi-amber">lessons-learned register</span>.</span></div>
+        </div>
+
+        <h3>Integrated Change Control</h3>
+        <ol class="num-list">
+          <li><span class="hi-blue">Influence factors</span> &mdash; ensure changes are beneficial</li>
+          <li><span class="hi-blue">Determine change occurred</span> &mdash; no surprises!</li>
+          <li><span class="hi-blue">Manage actual changes</span> &mdash; minimize unnecessary ones</li>
+        </ol>
+        <p>Change Control System includes: <span class="hi-amber">CCB</span>, <span class="hi-amber">configuration management</span>, and <span class="hi-amber">communication</span>.</p>
+
+        <hr class="divider"/>
+        <h3>Closing Projects</h3>
+        <ul class="styled-list">
+          <li><span class="hi-green">Document updates</span> &mdash; all marked final</li>
+          <li><span class="hi-green">Final product transition</span> &mdash; formal delivery</li>
+          <li><span class="hi-green">OPA updates</span> &mdash; final report, transition plan, history</li>
+        </ul>
+      </section>
+
+      <!-- LESSON 5 -->
+      <section class="section" id="lesson5">
+        <p class="section-overline">Lesson 5</p>
+        <h2>PM Methodologies &amp; SDLC</h2>
+        <p class="section-lead">Software Development Life Cycle models and how to choose the right methodology.</p>
+
+        <div class="callout">
+          <div class="callout-title blue">SDLC Definition</div>
+          <p>A structured, step-by-step methodology for <span class="hi-blue">designing, developing, and testing</span> good-quality software.</p>
+        </div>
+
+        <h4>SDLC Phases</h4>
+        <div class="flow" style="flex-wrap:wrap;gap:var(--space-sm);">
+          <div class="flow-step"><span class="step-name">Planning</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-name">Analysis</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-name">Design</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-name">Development</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-name">Testing</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-name">Deployment</span></div>
+          <div class="flow-arrow" aria-hidden="true">&rarr;</div>
+          <div class="flow-step"><span class="step-name">Maintenance</span></div>
+        </div>
+
+        <hr class="divider"/>
+        <h3>9 SDLC Models</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Model</th><th>Best Fit</th><th>Key Trait</th></tr></thead>
+            <tbody>
+              <tr><td><span class="hi-blue">Waterfall</span></td><td>Clear, stable requirements</td><td>Sequential, linear, no going back</td></tr>
+              <tr><td><span class="hi-blue">RAD</span></td><td>Rapid dev + user feedback</td><td>Iterative prototyping; heavy user involvement</td></tr>
+              <tr><td><span class="hi-blue">Agile</span></td><td>Changing requirements</td><td>Adapts quickly; group of dev processes</td></tr>
+              <tr><td><span class="hi-blue">Scrum</span></td><td>Agile + sprints</td><td>Time-boxed; transparency, inspection, adaptation</td></tr>
+              <tr><td><span class="hi-blue">Iterative</span></td><td>Growing requirements</td><td>Each cycle = semi-developed deployable version</td></tr>
+              <tr><td><span class="hi-amber">Spiral</span></td><td><span class="hi-rose">High risk</span></td><td>Risk handling; loops represent phases</td></tr>
+              <tr><td><span class="hi-blue">V-Model</span></td><td>Strong testing focus</td><td>Each stage paired with a test phase</td></tr>
+              <tr><td><span class="hi-rose">Big Bang</span></td><td>Unstructured</td><td>No planning, no documentation</td></tr>
+              <tr><td><span class="hi-green">DevOps</span></td><td>Continuous integration</td><td>Collaboration, automation, breaks silos</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="divider"/>
+        <h3>How to Choose</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Criteria</th><th>Waterfall / V-Model</th><th>Agile / Spiral / DevOps</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Requirements</strong></td><td>Clear, stable</td><td>Unclear, evolving</td></tr>
+              <tr><td><strong>Size</strong></td><td>Small, simple</td><td>Large, complex</td></tr>
+              <tr><td><strong>Team</strong></td><td>Less experienced</td><td>Experienced iterative</td></tr>
+              <tr><td><strong>Client</strong></td><td>Minimal involvement</td><td>Frequent feedback</td></tr>
+              <tr><td><strong>Budget</strong></td><td>Fixed, strict</td><td>Flexible</td></tr>
+              <tr><td><strong>Risk</strong></td><td>Low</td><td>High (Spiral)</td></tr>
+              <tr><td><strong>Release</strong></td><td>No rush</td><td>Quick (Agile/RAD)</td></tr>
+              <tr><td><strong>Maintenance</strong></td><td>Minimal</td><td>Long-term (DevOps)</td></tr>
+              <tr><td><strong>Stakeholders</strong></td><td>Low engagement</td><td>High (Scrum)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-violet">
+          <div class="callout-title violet">Quick Shortcut &mdash; Memorize This!</div>
+          <p><span class="hi-blue">Waterfall</span> = stable &middot; <span class="hi-blue">V-Model</span> = testing &middot; <span class="hi-violet">Agile/Scrum</span> = changing + feedback &middot; <span class="hi-rose">Spiral</span> = high risk &middot; <span class="hi-amber">RAD</span> = rapid &middot; <span class="hi-green">DevOps</span> = continuous</p>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="section" id="quiz">
+        <p class="section-overline">Practice Quiz</p>
+        <h2>Test Your Knowledge</h2>
+        <p class="section-lead">35 multiple-choice questions covering all five lessons. Good luck!</p>
+
+        <div class="quiz-progress">
+          <span id="quizProgressText">Question 1 of 35</span>
+          <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill" style="width:3%"></div></div>
+          <span id="quizScoreText">Score: 0/0</span>
+        </div>
+        <div id="quizContainer"></div>
+        <div class="quiz-nav">
+          <button class="btn btn-outline" id="quizPrev" disabled onclick="quizNav(-1)">&larr; Previous</button>
+          <button class="btn" id="quizNext" onclick="quizNav(1)">Next &rarr;</button>
+        </div>
+        <div class="quiz-score" id="quizScore" style="display:none;">
+          <div class="score-num" id="finalScore">0%</div>
+          <div class="score-label" id="finalScoreDetail">0 out of 35 correct</div>
+          <div class="score-msg" id="finalScoreMsg"></div><br/>
+          <button class="btn" onclick="resetQuiz()">Retake Quiz</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // ============================================================
+    // DARK MODE
+    // ============================================================
+    /** Reads stored theme preference or system preference, applies it. */
+    function initTheme() {
+      var saved = localStorage.getItem('pm-theme');
+      if (saved) { document.documentElement.setAttribute('data-theme', saved); }
+      else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+      updateThemeIcon();
+    }
+
+    /** Toggles between light and dark mode. */
+    function toggleTheme() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('pm-theme', next);
+      updateThemeIcon();
+    }
+
+    /** Updates the moon/sun icon in the toggle buttons. */
+    function updateThemeIcon() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var icon = isDark ? '\u2600' : '\u263E'; // ☀ or ☾
+      var label = isDark ? 'Light Mode' : 'Dark Mode';
+      document.getElementById('themeIcon').textContent = icon;
+      document.getElementById('themeToggle').querySelector('span:first-child').textContent = label;
+      document.getElementById('mobileThemeToggle').textContent = icon;
+    }
+
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    document.getElementById('mobileThemeToggle').addEventListener('click', toggleTheme);
+    initTheme();
+
+    // ============================================================
+    // NAVIGATION
+    // ============================================================
+    function navigateTo(sectionId) {
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      var target = document.getElementById(sectionId);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+      var navBtn = document.querySelector('[data-target="' + sectionId + '"]');
+      if (navBtn) navBtn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      closeSidebar();
+    }
+    document.querySelectorAll('.nav-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { navigateTo(btn.dataset.target); });
+    });
+
+    // ============================================================
+    // MOBILE SIDEBAR
+    // ============================================================
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('overlay');
+    var mobileToggle = document.getElementById('mobileToggle');
+    function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); }
+    function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+    mobileToggle.addEventListener('click', function() {
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+    overlay.addEventListener('click', closeSidebar);
+
+    // ============================================================
+    // QUIZ — 35 Questions
+    // ============================================================
+    var quizData = [
+      // Lesson 1 (1-8)
+      {q:"What is the difference between a project and operations?",o:["A project is temporary and creates a unique result; operations are ongoing work sustaining the business","A project never ends; operations are temporary","A project and operations are the same thing","Operations create unique results; projects sustain the business"],c:0,e:"A project is a temporary endeavor creating a unique product, service, or result. Operations are ongoing work."},
+      {q:"Which is NOT one of the seven project attributes?",o:["Unique purpose","Temporary","Unlimited budget","Involves uncertainty"],c:2,e:"The seven attributes: unique purpose, temporary, drives change/value, progressive elaboration, requires resources, primary customer/sponsor, involves uncertainty."},
+      {q:"What are the triple constraints?",o:["People, Process, Technology","Scope, Time, Cost","Quality, Risk, Resources","Plan, Execute, Close"],c:1,e:"Triple constraint = Scope, Time, Cost. Quadruple adds Quality."},
+      {q:"Who are project stakeholders?",o:["Only the project manager","Only the sponsor and team","People involved in or affected by project activities — sponsor, team, customers, users, suppliers, opponents","Only the end users"],c:2,e:"Stakeholders are ALL people involved in or affected by the project."},
+      {q:"How many PM knowledge areas exist (PMBOK)?",o:["5","8","10","12"],c:2,e:"10 knowledge areas: Scope, Schedule, Cost, Quality, Resource, Communications, Risk, Procurement, Stakeholder, Integration."},
+      {q:"What is the quadruple constraint?",o:["Scope, Time, Cost, Risk","Scope, Time, Cost, Quality","People, Process, Technology, Budget","Plan, Do, Check, Act"],c:1,e:"The quadruple constraint adds Quality to the traditional triple constraint of Scope, Time, and Cost."},
+      {q:"What distinguishes a program from a project?",o:["A program is shorter than a project","A program is a group of related projects managed together for benefits not available individually","A program has no manager","Programs don't have budgets"],c:1,e:"A program is a group of related projects, subsidiary programs, and activities managed in a coordinated way to obtain collective benefits."},
+      {q:"What does PMI stand for and when was it founded?",o:["Project Management Institute, founded in 1969","Professional Managers International, founded in 1985","Project Methodology Institute, founded in 1975","Program Management Institute, founded in 1990"],c:0,e:"PMI = Project Management Institute, founded in 1969 with 500,000+ members by 2017."},
+      // Lesson 2 (9-16)
+      {q:"What is the systems approach?",o:["Using only software systems","A holistic and analytical approach using systems philosophy, analysis, and management","Replacing project managers with AI","Managing only IT systems"],c:1,e:"The systems approach is holistic and analytical, using systems philosophy, systems analysis, and systems management."},
+      {q:"Which organizational frame focuses on competition for power?",o:["Structural","Human Resources","Political","Symbolic"],c:2,e:"The Political frame addresses competition among groups/individuals for power, resources, and leadership."},
+      {q:"What is a matrix organizational structure?",o:["Only functional managers exist","Only project managers exist","Personnel report to both functional and project managers","No formal reporting"],c:2,e:"Matrix = middle ground where personnel report to both functional and project managers."},
+      {q:"Why is top management commitment critical?",o:["It isn't important","It provides resources, timely approvals, cooperation, and senior guidance","Only matters for the budget","They only sign the charter"],c:1,e:"Top management provides resources, approvals, cooperation, and mentoring."},
+      {q:"Which life-cycle type is also called 'Agile'?",o:["Predictive","Iterative","Incremental","Adaptive"],c:3,e:"Adaptive = Agile. Predictive = Waterfall."},
+      {q:"What are the four Agile Manifesto values?",o:["Speed, Quality, Cost, Scope","Individuals over processes, Working software over docs, Customer collaboration over contracts, Responding to change over plans","Planning, Executing, Monitoring, Closing","Risk, Schedule, Budget, Resources"],c:1,e:"The Agile Manifesto prioritizes individuals, working software, customer collaboration, and responding to change."},
+      {q:"What is a sprint in Scrum?",o:["A very fast meeting","A time-boxed cycle (usually 2-4 weeks) to complete selected work","A one-year development phase","The final testing stage"],c:1,e:"A sprint is a time-boxed iteration, typically 2-4 weeks, where the team completes a chunk of work."},
+      {q:"What are advantages of virtual teams?",o:["Higher office costs","Lower costs, more expertise, better work-life balance","Less technology needed","Everyone works in the same room"],c:1,e:"Virtual teams offer lower costs, broader expertise, and improved work-life balance, though they face isolation and communication challenges."},
+      // Lesson 3 (17-22)
+      {q:"What are the five process groups in order?",o:["Planning, Initiating, Controlling, Executing, Closing","Initiating, Planning, Executing, Monitoring & Controlling, Closing","Starting, Organizing, Working, Reviewing, Ending","Concept, Design, Build, Test, Deploy"],c:1,e:"I-P-E-M-C: Initiating, Planning, Executing, Monitoring & Controlling, Closing."},
+      {q:"What happens during Closing?",o:["Budget is established","Team is recruited","Acceptance is formalized, files archived, lessons learned documented","Charter is created"],c:2,e:"Closing formalizes acceptance, archives files, and documents lessons learned."},
+      {q:"Which process group consumes the most time and budget?",o:["Initiating","Planning","Executing","Closing"],c:2,e:"Executing consumes the most time and budget — it's where the actual work happens."},
+      {q:"What is developed during the Initiating process group (Integration)?",o:["Project Management Plan","Work Breakdown Structure","Project Charter","Lessons Learned"],c:2,e:"The Project Charter is developed during Initiating."},
+      {q:"Which methodology uses the phrase 'PRojects IN Controlled Environments'?",o:["Agile","Six Sigma","PRINCE2","RUP"],c:2,e:"PRINCE2 stands for PRojects IN Controlled Environments."},
+      {q:"During which process group is the Project Management Plan developed?",o:["Initiating","Planning","Executing","Closing"],c:1,e:"The Project Management Plan is developed during Planning."},
+      // Lesson 4 (23-30)
+      {q:"What is Project Integration Management?",o:["Managing only the schedule","Coordinating all PM knowledge areas so elements come together at the right times","Only handling risks","Managing the budget exclusively"],c:1,e:"Integration management coordinates ALL knowledge areas throughout the project life cycle."},
+      {q:"What does SWOT stand for?",o:["Schedule, Work, Output, Timeline","Strengths, Weaknesses, Opportunities, Threats","Systems, Workflow, Operations, Technology","Scope, Work, Objectives, Tasks"],c:1,e:"SWOT = Strengths (internal), Weaknesses (internal), Opportunities (external), Threats (external)."},
+      {q:"How is ROI calculated?",o:["(Benefits + Costs) x 100","(Benefits - Costs) / Costs","Benefits / Time","Costs / Benefits"],c:1,e:"ROI = (Benefits - Costs) / Costs. Result is a percentage."},
+      {q:"What is a baseline?",o:["Minimum team salary","First draft never updated","A documented starting point used for future comparison","The final deliverable"],c:2,e:"A baseline is a documented starting point, measurement, or observation for future comparison."},
+      {q:"What are the three objectives of integrated change control?",o:["Hire, budget, extend","Influence factors for beneficial changes, determine change occurred, manage actual changes","Create documents, hold meetings, send emails","Plan scope, plan time, plan cost"],c:1,e:"Three objectives: influence beneficial changes, determine changes occurred, manage actual changes."},
+      {q:"What is a Change Control Board (CCB)?",o:["Schedule builders","A body that reviews and approves/rejects project changes","Version control software","Closing-phase-only team"],c:1,e:"A CCB is part of the formal change control system that reviews and authorizes changes."},
+      {q:"What are the three criteria for broad organizational needs?",o:["Speed, Quality, Cost","Need, Funding, Will","Risk, Reward, Timeline","Scope, Schedule, Budget"],c:1,e:"Need: Is it necessary? Funding: Can it be afforded? Will: Is there strong commitment?"},
+      {q:"What is the golden rule for planning and execution?",o:["The manager always plans alone","Those who will do the work should plan the work","Planning and execution are separate","Only executives should plan"],c:1,e:"'Those who will do the work should plan the work' — planning and execution are intertwined."},
+      // Lesson 5 (31-35)
+      {q:"When should you choose Waterfall over Agile?",o:["Requirements change frequently","Client needs rapid prototyping","Requirements are clear, stable, and changes should be restricted","Project has high risk"],c:2,e:"Waterfall is best for clear, stable requirements where changes are restricted."},
+      {q:"Which SDLC model is designed for high-risk projects?",o:["Waterfall","Big Bang","V-Model","Spiral"],c:3,e:"Spiral is designed for risk handling, with loops representing phases and allowing revisions."},
+      {q:"If requirements change frequently with frequent client feedback, which methodology fits?",o:["Waterfall","V-Model","Agile/Scrum","Big Bang"],c:2,e:"Agile/Scrum excels at handling changing requirements with frequent client interaction."},
+      {q:"What makes the V-Model unique?",o:["No testing phase","Completely unstructured","Each development stage is paired with a testing phase in a V shape","Only for small projects"],c:2,e:"V-Model pairs each development stage with a corresponding testing phase in a V-shaped sequence."},
+      {q:"What are the main characteristics of DevOps?",o:["Strict waterfall with no automation","Collaboration, automation, continuous delivery, reducing dev/ops separation","Only software testing","Replaces all other methodologies"],c:1,e:"DevOps = collaboration + automation + continuous delivery + breaking down silos between dev and operations."}
+    ];
+
+    var currentQuestion = 0;
+    var answers = new Array(quizData.length).fill(-1);
+
+    function initQuiz() {
+      currentQuestion = 0;
+      answers = new Array(quizData.length).fill(-1);
+      document.getElementById('quizScore').style.display = 'none';
+      document.getElementById('quizContainer').style.display = 'block';
+      document.querySelector('.quiz-progress').style.display = 'flex';
+      document.querySelector('.quiz-nav').style.display = 'flex';
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      var qd = quizData[currentQuestion];
+      var idx = currentQuestion;
+      var ua = answers[idx];
+      var answered = ua !== -1;
+      var letters = ['A','B','C','D'];
+      var optHTML = '';
+      for (var i = 0; i < qd.o.length; i++) {
+        var cls = '', dis = '';
+        if (answered) { dis = 'disabled'; if (i === qd.c) cls = 'correct'; else if (i === ua && ua !== qd.c) cls = 'incorrect'; }
+        optHTML += '<button class="quiz-option '+cls+'" '+dis+' onclick="selectAnswer('+idx+','+i+')" aria-label="Option '+letters[i]+'">'
+          +'<span class="opt-letter">'+letters[i]+'</span>'+qd.o[i]+'</button>';
+      }
+      var expHTML = '<div class="quiz-explanation '+(answered?'show':'')+'"><strong>Explanation:</strong> '+qd.e+'</div>';
+      document.getElementById('quizContainer').innerHTML =
+        '<div class="quiz-question-card"><div class="quiz-q-num">Question '+(idx+1)+' of '+quizData.length+'</div>'
+        +'<div class="quiz-q-text">'+qd.q+'</div><div class="quiz-options">'+optHTML+'</div>'+expHTML+'</div>';
+      updateProgress();
+      document.getElementById('quizPrev').disabled = currentQuestion === 0;
+      document.getElementById('quizNext').textContent = (currentQuestion === quizData.length-1 && answered) ? 'See Results \u2192' : 'Next \u2192';
+    }
+
+    function selectAnswer(qIdx, oIdx) { if (answers[qIdx] !== -1) return; answers[qIdx] = oIdx; renderQuestion(); }
+    function quizNav(dir) {
+      var next = currentQuestion + dir;
+      if (next >= quizData.length) { showResults(); return; }
+      if (next < 0 || next >= quizData.length) return;
+      currentQuestion = next; renderQuestion();
+    }
+    function updateProgress() {
+      var ac = answers.filter(function(a){return a!==-1;}).length;
+      var cc = answers.filter(function(a,i){return a===quizData[i].c;}).length;
+      var pct = ((currentQuestion+1)/quizData.length)*100;
+      document.getElementById('quizProgressText').textContent = 'Question '+(currentQuestion+1)+' of '+quizData.length;
+      document.getElementById('quizProgressFill').style.width = pct+'%';
+      document.getElementById('quizScoreText').textContent = 'Score: '+cc+'/'+ac;
+    }
+    function showResults() {
+      var cc = answers.filter(function(a,i){return a===quizData[i].c;}).length;
+      var pct = Math.round((cc/quizData.length)*100);
+      var msg = pct>=90?'Outstanding! You\'re ready for that midterm!':pct>=75?'Great job! Review a few more topics.':pct>=50?'Good effort! Review missed lessons and retry.':'Keep studying! Go through each lesson and retake.';
+      document.getElementById('quizContainer').style.display='none';
+      document.querySelector('.quiz-progress').style.display='none';
+      document.querySelector('.quiz-nav').style.display='none';
+      document.getElementById('finalScore').textContent=pct+'%';
+      document.getElementById('finalScoreDetail').textContent=cc+' out of '+quizData.length+' correct';
+      document.getElementById('finalScoreMsg').textContent=msg;
+      document.getElementById('quizScore').style.display='block';
+    }
+    function resetQuiz() { initQuiz(); }
+    initQuiz();
+  </script>
+</body>
+</html>
