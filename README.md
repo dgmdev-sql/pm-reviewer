@@ -4,7 +4,7 @@ An interactive, web-based study application designed for the CTPRJMGT Project Ma
 
 ## Deployment
 
-**Live Application:** [pm-reviewer.vercel.app](https://pm-reviewer.vercel.app)
+**Live Application:** [pm-reviewer.vercel.app](https://pm-reviewer-two.vercel.app/)
 
 ## Core Features
 
